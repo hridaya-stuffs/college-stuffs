@@ -1,36 +1,31 @@
 // import logo from "./logo.svg";
 import "./App.css";
-
+import { Fragment, useEffect, useState } from "react";
 import Header from "./components/header";
 
-import { Fragment, useEffect, useState } from "react";
-
 function App() {
-  // var a = 5;
-  // console.log(a);
-
-  // Implement arrow function
-  const [hello, setHello] = useState();
-  console.log(hello);
-  // setHello(10);
-
-  // function forArrow() {}
-  // Arrow function
-  // const forArrow = () => {
-  //   console.log("Hello");
-  //   alert("Hello");
-  // };
+  const [dogList, setDogList] = useState([]);
 
   useEffect(() => {
-    console.log("Hello");
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch("https://dog.ceo/api/breeds/list/all", requestOptions)
+      .then((response) => response.json())
+      .then((result) => setDogList(Object.keys(result.message)))
+      .catch((error) => console.log("error", error));
   }, []);
+
+  const dataList = dogList.map((item, index) => {
+    return <li key={index}>{item}</li>;
+  });
 
   return (
     <Fragment>
-      <div>
-        <button onClick={() => setHello(10)}>Click me</button>
-        <Header />
-      </div>
+      <Header />
+      <ul>{dataList}</ul>
     </Fragment>
   );
 }
